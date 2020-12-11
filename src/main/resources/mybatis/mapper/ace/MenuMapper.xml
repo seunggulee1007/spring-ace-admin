@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+    @apiNote 메뉴 관련 매퍼
+    @author  seunggu
+ -->
+<mapper namespace="com.inno.ace.model.dao.ace.MenuDao">
+
+    <!--메뉴 전체 리스트 조회 -->
+    <select id="selectMenuList" resultType="menuVO">
+        select
+            menu_id         as menuId,
+            par_menu_id     as parMenuId,
+            menu_nm         as menuNm,
+            menu_nm         as name,
+            ord             as ord,
+            menu_yn         as menuYn,
+            use_yn          as useYn,
+            menu_level      as menuLevel,
+            page_url        as pageUrl,
+            component,
+            meta_info       as metaInfo,
+            crt_dtm         as crtDtm,
+            crt_id          as crtId,
+            chg_dtm         as chgDtm,
+            chg_id          as chgId
+        from tb_menu
+        ORDER BY par_menu_id, ORD asc
+    </select>
+
+    <!-- 메뉴 단건 조회 -->
+    <select id="selectMenu" resultType="menuVO">
+        select
+            menu_id         as menuId,
+            par_menu_id     as parMenuId,
+            menu_nm         as menuNm,
+            ord             as ord,
+            use_yn          as useYn,
+            menu_yn         as menuYn,
+            menu_level      as menuLevel,
+            page_url        as pageUrl,
+            component,
+            meta_info       as metaInfo,
+            crt_dtm         as crtDtm,
+            crt_id          as crtId,
+            chg_dtm         as chgDtm,
+            chg_id          as chgId
+        from tb_menu
+        where
+            menu_id = #{menuId}
+    </select>
+
+    <!-- 부모가 같은 메뉴 전체 조회 -->
+    <select id="selectMenuListByParMenuId" resultType="menuVO">
+        select
+            menu_id         as menuId,
+            par_menu_id     as parMenuId,
+            menu_nm         as menuNm,
+            ord             as ord,
+            use_yn          as useYn,
+            menu_yn         as menuYn,
+            menu_level      as menuLevel,
+            page_url        as pageUrl,
+            component,
+            meta_info       as metaInfo,
+            crt_dtm         as crtDtm,
+            crt_id          as crtId,
+            chg_dtm         as chgDtm,
+            chg_id          as chgId
+        from tb_menu
+        where
+            par_menu_id = #{parMenuId}
+            and menu_id <![CDATA[<>]]> 0
+        order by ord
+    </select>
+
+    <!-- 순번과 메뉴아이디 채번 -->
+    <select id="selectOrdAndMenuId" resultType="menuVO">
+        SELECT
+            ifnull(MAX(ORD),0)+1 AS ORD,
+            case par_menu_id
+                when 0 then
+                    IFNULL(MAX(menu_id), 0) +1
+                else
+                    IFNULL(MAX(menu_id), #{parMenuId} * 1000) + 1
+            END  AS menu_id
+        FROM tb_menu
+        WHERE par_menu_id = #{parMenuId}
+    </select>
+
+    <!-- 메뉴 등록 -->
+    <insert id="insertMenu" parameterType="menuVO">
+        insert into
+            tb_menu(
+                menu_id,
+                par_menu_id,
+                menu_nm,
+                ord,
+                use_yn,
+                menu_yn,
+                menu_level,
+                page_url,
+                component,
+                meta_info,
+                crt_dtm,
+                crt_id
+            )values (
+                #{menuId},
+                #{parMenuId},
+                #{menuNm},
+                #{ord},
+                #{useYn},
+                #{menuYn},
+                #{menuLevel},
+                #{pageUrl},
+                #{component},
+                #{metaInfo},
+                now(),
+                #{crtId}
+            )
+    </insert>
+
+    <!-- 메뉴 수정 -->
+    <update id="updateMenu" parameterType="menuVO">
+        update tb_menu
+            set
+                par_menu_id = #{parMenuId},
+                menu_nm = #{menuNm},
+                ord = #{ord},
+                use_yn = #{useYn},
+                menu_yn = #{menuYn},
+                menu_level = #{menuLevel},
+                page_url = #{pageUrl},
+                component = #{component},
+                meta_info = #{metaInfo},
+                chg_dtm = now(),
+                chg_id = #{chgId}
+            where
+                menu_id = #{menuId}
+    </update>
+
+    <update id="updateOrd">
+        update tb_menu
+            set
+                ord = #{ord}
+            where
+                menu_id = #{menuId}
+    </update>
+
+    <!-- 하위 메뉴 전체 삭제 -->
+    <delete id="deleteChildMenu">
+        delete from tb_menu
+        where
+            par_menu_id = #{menuId}
+    </delete>
+
+    <!-- 메뉴 삭제 -->
+    <delete id="deleteMenu">
+        delete from tb_menu
+        where
+            menu_id = #{menuId}
+    </delete>
+
+</mapper>

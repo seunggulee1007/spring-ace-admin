@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+    @apiNote 사업자 휴폐업 관련 매퍼
+    @author  es-seungglee
+ -->
+<mapper namespace="com.inno.ace.model.dao.ace.UserDao">
+
+    <select id="selectUser" resultType="userVO">
+        select
+             user_id    as userId,
+             password,
+             user_nm    as userNm,
+             crt_dtm    as crtDtm
+        from tb_user
+        where 
+            user_id = #{userId}
+    </select>
+    
+    <insert id="insertUser" parameterType="userVO">
+        insert into tb_user(
+            user_id,
+            password,
+            user_nm
+        )values (
+            #{userId},
+            #{password},
+            #{userNm}
+        ) 
+    </insert>
+    
+    <update id="updatePwd" parameterType="userVO">
+        update tb_user
+            set
+                password = #{chgPwd}
+            where
+                user_id = #{userId}
+    </update>
+    
+    <update id="updateUid" parameterType="userVO">
+        update tb_user
+            set
+                u_id = #{uId}
+            where
+                user_id = #{userId}
+    </update>
+    
+</mapper>

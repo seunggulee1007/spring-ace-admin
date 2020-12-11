@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+    @apiNote 사업자 휴폐업 관련 매퍼
+    @author  es-seungglee
+ -->
+<mapper namespace="com.inno.ace.model.dao.ace.CodeDao">
+    
+    <!-- 코드 조회 -->
+    <select id="selectCodeList" resultType="codeVO">
+        select
+            code_id         as codeId,
+            code_master_id  as codeMasterId,
+            fn_getMasterCodeNm(code_master_id) as codeMasterNm,
+            code            as code,
+            code_nm         as codeNm,
+            code_info       as codeInfo,
+            use_yn          as useYn,
+            ord             as ord,
+            char_1          as char_1,
+            char_2          as char_2,
+            char_3          as char_3,
+            char_4          as char_4,
+            char_5          as char_5,
+            int_1           as int_1,
+            int_2           as int_2,
+            int_3           as int_3,
+            int_4           as int_4,
+            int_5           as int_5,
+            crt_id          as crtId,
+            crt_dtm         as crtDtm,
+            chg_id          as chgId,
+            chg_dtm         as chgDtm
+        from tb_code
+        where
+            code_master_id = #{searchId}
+        ORDER BY ord
+        LIMIT #{pageNo}, #{listCnt}
+    </select>
+
+    <select id="selectCodeListByMasterId" resultType="codeVO">
+        select
+            code_id         as codeId,
+            code_master_id  as codeMasterId,
+            code            as code,
+            code_nm         as codeNm,
+            code_info       as codeInfo,
+            use_yn          as useYn,
+            ord             as ord,
+            char_1          as char_1,
+            char_2          as char_2,
+            char_3          as char_3,
+            char_4          as char_4,
+            char_5          as char_5,
+            int_1           as int_1,
+            int_2           as int_2,
+            int_3           as int_3,
+            int_4           as int_4,
+            int_5           as int_5,
+            crt_id          as crtId,
+            crt_dtm         as crtDtm,
+            chg_id          as chgId,
+            chg_dtm         as chgDtm
+        from tb_code
+        where
+            code_master_id = #{codeMasterId}
+        ORDER BY ord
+    </select>
+
+    <select id="selectCodeCnt" resultType="int" parameterType="pagingVO">
+        select count(*) from tb_code where code_master_id = #{searchId}
+    </select>
+    
+    <!-- 코드 정보 등록 -->
+    <insert id="insertCode" parameterType="codeVO">
+        insert into tb_code(
+            code_master_id,
+            code          ,
+            code_nm       ,
+            code_info     ,
+            use_yn        ,
+            ord           ,
+            char_1        ,
+            char_2        ,
+            char_3        ,
+            char_4        ,
+            char_5        ,
+            int_1         ,
+            int_2         ,
+            int_3         ,
+            int_4         ,
+            int_5         ,
+            crt_id        ,
+            crt_dtm       
+        )values (
+            #{codeMasterId}, 
+            #{code},         
+            #{codeNm},
+            #{codeInfo},
+            #{useYn},
+            (select ifnull(max(ord),0) + 1 from tb_code as tc where code_master_id = #{codeMasterId}),
+            #{char_1},
+            #{char_2},
+            #{char_3},
+            #{char_4},
+            #{char_5},
+            #{int_1},
+            #{int_2},
+            #{int_3},
+            #{int_4},
+            #{int_5},
+            #{crtId},        
+            now()
+        )
+    </insert>
+    
+    <!-- 코드 정보 수정 -->
+    <update id="updateCode" parameterType="codeVO">
+        update tb_code
+            set
+                 code_master_id = #{codeMasterId}, 
+                 code           = #{code},         
+                 code_nm        = #{codeNm},
+                 code_info      = #{codeInfo},
+                 use_yn         = #{useYn},        
+                 char_1         = #{char1},        
+                 char_2         = #{char2},        
+                 char_3         = #{char3},        
+                 char_4         = #{char4},        
+                 char_5         = #{char5},        
+                 int_1          = #{int1},         
+                 int_2          = #{int2},         
+                 int_3          = #{int3},         
+                 int_4          = #{int4},         
+                 int_5          = #{int5},         
+                 chg_id         = #{chgId},
+                 chg_dtm        = now()
+            where
+                code_id= #{codeId}
+    </update>
+
+    <update id="updateOrd">
+        update
+            tb_code
+                set
+                    ord = #{ord}
+            where
+                code_id = #{codeId}
+    </update>
+
+    <!-- 코드 삭제 -->
+    <delete id="deleteCode">
+        delete from tb_code
+        where
+            code_id = #{codeId}
+    </delete>
+    
+    <!-- 코드 마스터 아이디로 코드 목록 전체 삭제 -->
+    <delete id="deleteCodeList">
+        delete from tb_code
+        where
+            code_master_id = #{codeMasterId}
+    </delete>
+    
+</mapper>

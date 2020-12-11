@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.inno.ace.model.dao.ace.CodeMasterDao">
+    
+    <!-- 코드 마스터 조회 -->
+    <select id="selectCodeMasterList" resultType="codeMasterVO" parameterType="pagingVO">
+        select
+            code_master_id as codeMasterId,
+            code_master_nm as codeMasterNm,
+            code_master_info as codeMasterInfo,
+            use_yn as useYn,
+            crt_id as crtId,
+            crt_dtm as crtDtm,
+            chg_id as chgId,
+            chg_dtm as chgDtm
+        from tb_code_master
+        <where>
+            <if test="searchKeyword != null and searchKeyword != ''">
+                <choose>
+                    <when test="searchKind == '1'">
+                        and code_master_nm like concat('%',#{searchKeyword}, '%')
+                    </when>
+                    <otherwise>
+                        and code_master_info like concat('%', #{searchKeyword}, '%')
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+        LIMIT #{pageNo}, #{listCnt}
+    </select>
+
+    <select id="selectCodeMasterCnt" resultType="int" parameterType="pagingVO">
+        select count(*) from tb_code_master
+        <where>
+            <if test="searchKeyword != null and searchKeyword != ''">
+                <choose>
+                    <when test="searchKind == '1'">
+                        and code_master_nm like concat('%',#{searchKeyword}, '%')
+                    </when>
+                    <otherwise>
+                        and code_master_info like concat('%', #{searchKeyword}, '%')
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+    </select>
+    <!-- 코드 마스터 정보 등록 -->
+    <insert id="insertCodeMaster" parameterType="codeMasterVO">
+        insert into tb_code_master(
+            code_master_nm,
+            code_master_info,
+            use_yn,
+            crt_id,
+            crt_dtm
+        )values (
+            #{codeMasterNm},
+            #{codeMasterInfo},
+            #{useYn},
+            #{crtId},
+            now()
+        )
+    </insert>
+    
+    <!-- 코드 마스터 정보 수정 -->
+    <update id="updateCodeMaster" parameterType="codeMasterVO">
+        update tb_code_master
+            set
+                code_master_nm = #{codeMasterNm},
+                code_master_info = #{codeMasterInfo},
+                use_yn = #{useYn},
+                chg_id = #{chgId},
+                chg_dtm = now()
+            where
+                code_master_id= #{codeMasterId}
+    </update>
+    
+    <!-- 코드 마스터 삭제 -->
+    <delete id="deleteCodeMaster">
+        delete from tb_code_master
+        where
+            code_master_id = #{codeMasterId}
+    </delete>
+    
+</mapper>
