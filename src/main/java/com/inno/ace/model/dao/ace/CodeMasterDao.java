@@ -10,6 +10,13 @@ import java.util.List;
 public interface CodeMasterDao {
 
     /**
+     * 중복 체크
+     * @param codeMasterNm
+     * @return
+     */
+    int selectDupleCodeNm(String codeMasterNm);
+
+    /**
      * @apiNote 코드 마스터 건수 조회
      * @return
      */

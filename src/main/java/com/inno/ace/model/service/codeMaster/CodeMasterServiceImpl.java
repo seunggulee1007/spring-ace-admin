@@ -1,5 +1,6 @@
 package com.inno.ace.model.service.codeMaster;
 
+import com.inno.ace.advice.exception.DuplicationException;
 import com.inno.ace.enums.CommonMsg;
 import com.inno.ace.model.dao.ace.CodeMasterDao;
 import com.inno.ace.model.vo.CodeMasterVO;
@@ -14,6 +15,13 @@ public class CodeMasterServiceImpl implements CodeMasterService {
 
     // 코드 마스터 dao
     private final CodeMasterDao codeMasterDao;
+
+    public ResultVO selectDupleCodeNm(String codeMasterNm) {
+        if(codeMasterDao.selectDupleCodeNm(codeMasterNm) < 1) {
+            throw new DuplicationException(CommonMsg.DUPLE_CODE_MASTER_NM.getMsg());
+        }
+        return ResultVO.builder().resultMsg(CommonMsg.AVAILABLE_MASTER_NM.getMsg()).build();
+    }
 
     /**
      * 코드 마스터 리스트 조회

@@ -28,6 +28,7 @@ public class ExceptionAdvice{
                 .resultMsg(e.getMessage())
                 .errMsg(e.getStackTrace()[0].toString())
                 .build();
+        e.printStackTrace();
         return resultVO;
     }
 
@@ -65,7 +66,7 @@ public class ExceptionAdvice{
     }
     
     @ExceptionHandler(NoMemberException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     public ResultVO NoMemberException(NoMemberException e, HttpServletRequest request) {
         ResultVO resultVO = ResultVO.builder()
                 .result(CommonCode.FAIL.getCode())
@@ -77,7 +78,7 @@ public class ExceptionAdvice{
     }
     
     @ExceptionHandler(AlreadyMemberException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     public ResultVO AlreadyMemberException(AlreadyMemberException e, HttpServletRequest request) {
         ResultVO resultVO = ResultVO.builder()
                 .result(CommonCode.FAIL.getCode())
@@ -86,9 +87,20 @@ public class ExceptionAdvice{
                 .build();
         return resultVO;
     }
-    
+
+    @ExceptionHandler(DuplicationException.class)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    public ResultVO DupleClientException(DuplicationException e) {
+        ResultVO resultVO = ResultVO.builder()
+                .result(CommonCode.FAIL.getCode())
+                .resultMsg(e.getMessage())
+                .errMsg(e.getStackTrace()[0].toString())
+                .build();
+        return resultVO;
+    }
+
     @ExceptionHandler(FalseIDException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     public ResultVO FalseIDException(FalseIDException e, HttpServletRequest request) {
         ResultVO resultVO = ResultVO.builder()
                 .result(CommonCode.FAIL.getCode())
@@ -99,7 +111,7 @@ public class ExceptionAdvice{
     }
     
     @ExceptionHandler(BizServiceException.class)
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     protected ResultVO BizServiceException(BizServiceException e, HttpServletRequest request) {
         return ResultVO.builder()
                 .result(CommonCode.FAIL.getCode())
@@ -109,7 +121,7 @@ public class ExceptionAdvice{
     }
     
     @ExceptionHandler(CommonUtilException.class)
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     protected ResultVO CommonUtilException(CommonUtilException e, HttpServletRequest request) {
         return ResultVO.builder()
                 .result(CommonCode.FAIL.getCode())

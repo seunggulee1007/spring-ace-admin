@@ -4,9 +4,13 @@ import com.inno.ace.model.vo.CodeVO;
 import com.inno.ace.model.vo.PagingVO;
 import com.inno.ace.model.vo.ResultVO;
 
+import java.util.List;
+
 public interface CodeService {
 
     ResultVO selectCodeList(PagingVO pagingVO);
+
+    List<CodeVO> selectCodeListByCodeMasterNm(String codeMasterNm);
 
     ResultVO insertCode(CodeVO codeVO);
 

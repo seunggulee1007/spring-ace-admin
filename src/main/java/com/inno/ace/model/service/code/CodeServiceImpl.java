@@ -21,6 +21,10 @@ public class CodeServiceImpl implements CodeService {
         return ResultVO.builder().data(codeList).build();
     }
 
+    public List<CodeVO> selectCodeListByCodeMasterNm(String codeMasterNm) {
+        return codeDao.selectCodeListByCodeMasterNm(codeMasterNm);
+    }
+
     public ResultVO insertCode(CodeVO codeVO) {
         long result = 0;
         String resultMsg = CommonMsg.SUCCESS_WRITE.getMsg();

@@ -7,6 +7,13 @@ import com.inno.ace.model.vo.ResultVO;
 public interface CodeMasterService {
 
     /**
+     * 코드명 중복
+     * @param codeMasterNm
+     * @return
+     */
+    ResultVO selectDupleCodeNm(String codeMasterNm);
+
+    /**
      * 코드 마스터 리스트 조회
      * @param pagingVO
      * @return

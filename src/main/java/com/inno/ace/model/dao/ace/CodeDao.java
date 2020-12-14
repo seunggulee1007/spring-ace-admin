@@ -23,7 +23,21 @@ public interface CodeDao {
      * @return
      */
     int selectCodeCnt(PagingVO pagingVO);
-    
+
+    /**
+     * 마스터 아이디로 코드 리스트 조회
+     * @param codeMsterId
+     * @return
+     */
+    List<CodeVO>selectCodeListByMasterId(int codeMsterId);
+
+    /**
+     * 그룹 명으로 코스트 리스트 조회
+     * @param codeMasterNm
+     * @return
+     */
+    List<CodeVO> selectCodeListByCodeMasterNm(String codeMasterNm);
+
     /**
      * @apiNote 코드 정보 등록
      * @author leesg
@@ -31,8 +45,6 @@ public interface CodeDao {
      * @return
      */
     int insertCode(CodeVO codeVO);
-
-    List<CodeVO>selectCodeListByMasterId(int codeMsterId);
 
     /**
      * @apiNote 코드 수정

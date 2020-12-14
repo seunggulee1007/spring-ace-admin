@@ -5,13 +5,21 @@
     @author  es-seungglee
  -->
 <mapper namespace="com.inno.ace.model.dao.ace.CodeDao">
-    
+
+    <!-- 코드 마스터 명 중복 확인 -->
+    <select id="selectDupleCodeNm" parameterType="String" resultType="int">
+        select
+            count(*)
+        from tb_code_master
+        where code_master_nm = #{codeMasterNm}
+    </select>
+
     <!-- 코드 조회 -->
     <select id="selectCodeList" resultType="codeVO">
         select
             code_id         as codeId,
             code_master_id  as codeMasterId,
-            fn_getMasterCodeNm(code_master_id) as codeMasterNm,
+            fn_get_master_code_nm(code_master_id) as codeMasterNm,
             code            as code,
             code_nm         as codeNm,
             code_info       as codeInfo,
@@ -38,6 +46,7 @@
         LIMIT #{pageNo}, #{listCnt}
     </select>
 
+    <!--마스터 아이디로 코드 리스트 조회 -->
     <select id="selectCodeListByMasterId" resultType="codeVO">
         select
             code_id         as codeId,
@@ -67,6 +76,37 @@
         ORDER BY ord
     </select>
 
+    <!-- 코드 그룹으로 코드 정보 조회 -->
+    <select id="selectCodeListByCodeMasterNm" resultType="codeVO">
+        select
+            code_id         as codeId,
+            code_master_id  as codeMasterId,
+            code            as code,
+            code_nm         as codeNm,
+            code_info       as codeInfo,
+            tc.use_yn          as useYn,
+            ord             as ord,
+            char_1          as char_1,
+            char_2          as char_2,
+            char_3          as char_3,
+            char_4          as char_4,
+            char_5          as char_5,
+            int_1           as int_1,
+            int_2           as int_2,
+            int_3           as int_3,
+            int_4           as int_4,
+            int_5           as int_5,
+            tc.crt_id          as crtId,
+            tc.crt_dtm         as crtDtm,
+            tc.chg_id          as chgId,
+            tc.chg_dtm         as chgDtm
+        from tb_code tc
+        right JOIN tb_code_master tcm
+        USING(code_master_id)
+        WHERE code_master_nm = #{codeMasterNm}
+    </select>
+
+    <!-- 코드 카운트 -->
     <select id="selectCodeCnt" resultType="int" parameterType="pagingVO">
         select count(*) from tb_code where code_master_id = #{searchId}
     </select>
@@ -123,16 +163,16 @@
                  code_nm        = #{codeNm},
                  code_info      = #{codeInfo},
                  use_yn         = #{useYn},        
-                 char_1         = #{char1},        
-                 char_2         = #{char2},        
-                 char_3         = #{char3},        
-                 char_4         = #{char4},        
-                 char_5         = #{char5},        
-                 int_1          = #{int1},         
-                 int_2          = #{int2},         
-                 int_3          = #{int3},         
-                 int_4          = #{int4},         
-                 int_5          = #{int5},         
+                 char_1         = #{char_1},
+                 char_2         = #{char_2},
+                 char_3         = #{char_3},
+                 char_4         = #{char_4},
+                 char_5         = #{char_5},
+                 int_1          = #{int_1},
+                 int_2          = #{int_2},
+                 int_3          = #{int_3},
+                 int_4          = #{int_4},
+                 int_5          = #{int_5},
                  chg_id         = #{chgId},
                  chg_dtm        = now()
             where

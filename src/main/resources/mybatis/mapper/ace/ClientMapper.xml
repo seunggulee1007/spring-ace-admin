@@ -5,111 +5,213 @@
     @author  es-seungglee
  -->
 <mapper namespace="com.inno.ace.model.dao.ace.ClientDao">
-    
-    <!-- 코드 조회 -->
-    <select id="selectCodeList" resultType="codeVO">
+
+    <!-- 중복 체크 -->
+    <select id="confirmDuple" parameterType="String" resultType="int">
         select
-            code_id         as codeId,
-            code_master_id  as codeMasterId,
-            code            as code,
-            code_nm         as codeNm,
-            use_yn          as useYn,
-            ord             as ord
-            char_1          as char1,
-            char_2          as char2,
-            char_3          as char3,
-            char_4          as char4,
-            char_5          as char5,
-            int_1           as int1,
-            int_2           as int2,
-            int_3           as int3,
-            int_4           as int4,
-            int_5           as int5,
-            crt_id          as crtId,
-            crt_dtm         as crtDtm,
-            chg_id          as chgId,
-            chg_dtm         as chgDtm
-        from tb_code
+            COUNT(*)
+        from tb_client
         where
-            code_master_id = #{searchId}
-        LIMIT {pageNo}, {listCnt}
+            client_nm = #{clientNm}
     </select>
-    
-    <!-- 코드 정보 등록 -->
-    <insert id="insertCode" parameterType="codeVO">
-        insert into tb_code_master(
-            code_master_id,
-            code          ,
-            code_nm       ,
-            use_yn        ,
-            char_1        ,
-            char_2        ,
-            char_3        ,
-            char_4        ,
-            char_5        ,
-            int_1         ,
-            int_2         ,
-            int_3         ,
-            int_4         ,
-            int_5         ,
-            crt_id        ,
-            crt_dtm       
-        )values (
-            #{codeMasterId}, 
-            #{code},         
-            #{codeNm},       
-            #{useYn},        
-            #{char1},        
-            #{char2},        
-            #{char3},        
-            #{char4},        
-            #{char5},        
-            #{int1},         
-            #{int2},         
-            #{int3},         
-            #{int4},         
-            #{int5},         
-            #{crtId},        
+
+    <select id="selectClientList" parameterType="pagingVO" resultType="clientVO">
+        select
+            client_nm                   as clientNm,
+            client_kind                 as clientKind,
+            fn_code_nm('clientKind', client_kind) as clientKindNm,
+            biz_no                      as bizNo,
+            biz_result_msg              as bizResultMsg,
+            biz_result_detail_msg       as bizResultDetailMsg,
+            biz_result_detail_eng_msg   as bizResultDetailEngMsg,
+            biz_result                  as bizResult,
+            ceo_nm                      as ceoNm,
+            co_reg_no                   as coRegNo,
+            biz_cond                    as bizCond,
+            fn_code_nm('bizCond', biz_cond) as bizCondNm,
+            biz_kind                    as bizKind,
+            fn_code_nm('bizKind', biz_kind) as bizKindNm,
+            contract_status             as contractStatus,
+            fn_code_nm('contractStatus', contract_status) as contractStatusNm,
+            post_no                     as postNo,
+            addr                        as addr,
+            addr_eng                    as addrEng,
+            addr_type                   as addrType,
+            addr_detail                 as addrDetail,
+            road_nm                     as roadNm,
+            road_nm_cd                  as roadNmCd,
+            bcode                       as bcode,
+            bname                       as bname,
+            building_cd                 as buildingCd,
+            building_nm                 as buildingNm,
+            sido                        as sido,
+            sigungu                     as sigungu,
+            sigungu_cd                  as sigunguCd,
+            tel_no                      as telNo,
+            manager                     as manager,
+            phone                       as phone,
+            email                       as email,
+            contract_amt                as contractAmt,
+            contract_date_from          as contractDateFrom,
+            contract_date_to            as contractDateTo,
+            crt_id                      as crtId,
+            crt_dtm                     as crtDtm,
+            chg_id                      as chgId,
+            chg_dtm                     as chgDtm
+        from tb_client
+        <where>
+            <if test="searchKeyword != null and searchKeyword != ''">
+                <choose>
+                    <when test="searchKind eq '1'.toString()">
+                        and client_nm like concat('%',#{searchKeyword}, '%')
+                    </when>
+                    <when test="searchKind eq '2'.toString()">
+                        and ceo_nm like concat('%', #{searchKeyword}, '%')
+                    </when>
+                    <otherwise>
+                        and biz_no like concat('%', #{searchKeyword}, '%')
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+        LIMIT #{pageNo}, #{listCnt}
+    </select>
+
+    <select id="selectClientCnt" parameterType="pagingVO" resultType="int">
+        select
+            count(*)
+        from tb_client
+        <where>
+            <if test="searchKeyword != null and searchKeyword != ''">
+                <choose>
+                    <when test="searchKind eq '1'.toString()">
+                        and client_nm like concat('%',#{searchKeyword}, '%')
+                    </when>
+                    <when test="searchKind eq '2'.toString()">
+                        and ceo_nm like concat('%', #{searchKeyword}, '%')
+                    </when>
+                    <otherwise>
+                        and biz_no like concat('%', #{searchKeyword}, '%')
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertClient" parameterType="clientVO">
+        insert into tb_client(
+            client_nm,
+            client_kind,
+            biz_no,
+            biz_result_msg,
+            biz_result_detail_msg,
+            biz_result_detail_eng_msg,
+            biz_result,
+            ceo_nm,
+            co_reg_no,
+            biz_cond,
+            biz_kind,
+            contract_status,
+            post_no,
+            addr,
+            addr_eng,
+            addr_type,
+            addr_detail,
+            road_nm,
+            road_nm_cd,
+            bcode,
+            bname,
+            building_cd,
+            building_nm,
+            sido,
+            sigungu,
+            sigungu_cd,
+            tel_no,
+            manager,
+            phone,
+            email,
+            contract_amt,
+            contract_date_from,
+            contract_date_to,
+            crt_id,
+            crt_dtm
+        )values(
+            #{clientNm},
+            #{clientKind},
+            #{bizNo},
+            #{bizResultMsg},
+            #{bizResultDetailMsg},
+            #{bizResultDetailEngMsg},
+            #{bizResult},
+            #{ceoNm},
+            #{coRegNo},
+            #{bizCond},
+            #{bizKind},
+            #{contractStatus},
+            #{postNo},
+            #{addr},
+            #{addrEng},
+            #{addrType},
+            #{addrDetail},
+            #{roadNm},
+            #{roadNmCd},
+            #{bcode},
+            #{bname},
+            #{buildingCd},
+            #{buildingNm},
+            #{sido},
+            #{sigungu},
+            #{sigunguCd},
+            #{telNo},
+            #{manager},
+            #{phone},
+            #{email},
+            #{contractAmt},
+            #{contractDateFrom},
+            #{contractDateTo},
+            #{crtId},
             now()
-        )
+       )
     </insert>
-    
-    <!-- 코드 정보 수정 -->
-    <update id="updateCode" parameterType="codeVO">
-        update tb_code_master
+
+    <update id="updateClient" parameterType="clientVO">
+        update tb_client
             set
-                 code_master_id = #{codeMasterId}, 
-                 code           = #{code},         
-                 code_nm        = #{codeNm},       
-                 use_yn         = #{useYn},        
-                 char_1         = #{char1},        
-                 char_2         = #{char2},        
-                 char_3         = #{char3},        
-                 char_4         = #{char4},        
-                 char_5         = #{char5},        
-                 int_1          = #{int1},         
-                 int_2          = #{int2},         
-                 int_3          = #{int3},         
-                 int_4          = #{int4},         
-                 int_5          = #{int5},         
-                 chg_id         = #{chgId},
-                 chg_dtm        = now()
+                client_nm= #{clientNm},
+                client_kind= #{clientKind},
+                biz_no= #{bizNo},
+                biz_result_msg= #{bizResultMsg},
+                biz_result_detail_msg= #{bizResultDetailMsg},
+                biz_result_detail_eng_msg= #{bizResultDetailEngMsg},
+                biz_result= #{bizResult},
+                ceo_nm= #{ceoNm},
+                co_reg_no= #{coRegNo},
+                biz_cond= #{bizCond},
+                biz_kind= #{bizKind},
+                contract_status = #{contractStatus},
+                post_no= #{postNo},
+                addr= #{addr},
+                addr_eng= #{addrEng},
+                addr_type= #{addrType},
+                addr_detail= #{addrDetail},
+                road_nm = #{roadNm},
+                road_nm_cd= #{roadNmCd},
+                bcode= #{bcode},
+                bname= #{bname},
+                building_cd= #{buildingCd},
+                building_nm= #{buildingNm},
+                sido= #{sido},
+                sigungu= #{sigungu},
+                sigungu_cd= #{sigunguCd},
+                tel_no= #{telNo},
+                manager= #{manager},
+                phone= #{phone},
+                email= #{email},
+                contract_amt= #{contractAmt},
+                contract_date_from= #{contractDateFrom},
+                contract_date_to= #{contractDateTO}
             where
-                code_id= #{codeId}
+                client_id = #{clientId}
     </update>
-    
-    <!-- 코드 삭제 -->
-    <delete id="deleteCode">
-        delete from tb_code
-        where
-            code_id = #{codeId}
-    </delete>
-    
-    <!-- 코드 마스터 아이디로 코드 목록 전체 삭제 -->
-    <delete id="deleteCodeList">
-        delete from tb_code
-        where
-            code_master_id = #{codeMasterId}
-    </delete>
     
 </mapper>

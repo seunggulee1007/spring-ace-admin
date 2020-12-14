@@ -40,6 +40,14 @@ public class ClientVO extends CommonVO {
     private String addrType;
     /** 상세주소 */
     private String addrDetail;
+    /** 도로명 */
+    private String roadNm;
+    /** 도로명 코드 */
+    private String roadNmCd;
+    /** 법정동/법정리 코드 */
+    private String bcode;
+    /** 법정동/법정리 이름 */
+    private String bname;
     /** 건물관리번호 */
     private String buildingCd;
     /** 건물명 */
