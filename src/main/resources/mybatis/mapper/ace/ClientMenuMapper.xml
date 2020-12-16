@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+    @apiNote 메뉴 관련 매퍼
+    @author  seunggu
+ -->
+<mapper namespace="com.inno.ace.model.dao.ace.ClientMenuDao">
+
+    <!--메뉴 전체 리스트 조회 -->
+    <select id="selectClientMenuList" resultType="clientMenuVO">
+        SELECT
+            menu_id AS menuId,
+            menu_nm AS menuNm,
+            client_menu_id AS clientMenuId,
+            case when client_menu_id IS NULL then 'N'
+            ELSE 'Y' END AS useYn,
+            ifnull(client_id, #{clientId}) AS clientId
+        FROM tb_menu tm
+        left JOIN (
+            SELECT
+                menu_id,
+                client_menu_id,
+                client_id
+            from tb_client_menu
+            WHERE
+                client_id = #{clientId}
+        ) tcm
+        USING(menu_id)
+        WHERE
+            par_menu_id = 0
+            AND menu_id <![CDATA[<>]]> 0
+            AND use_yn = 'Y'
+        ORDER BY ord
+    </select>
+
+    <insert id="insertClientMenu" parameterType="clientMenuVO">
+        insert into tb_client_menu(
+            menu_id,
+            client_id,
+            apply_yn,
+            crt_id
+        )values(
+            #{menuId},
+            #{clientId},
+            #{applyYn},
+            #{crtId}
+       )
+    </insert>
+
+    <update id="updateClientMenu" parameterType="clientMenuVO">
+        update tb_client_menu
+            set
+                menu_id = #{menuId},
+                client_id = #{clientId},
+                apply_yn = #{applyYn},
+        where
+            client_menu_id = #{clientMenuId}
+    </update>
+
+</mapper>

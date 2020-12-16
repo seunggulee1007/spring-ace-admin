@@ -2,6 +2,7 @@ package com.inno.ace.advice;
 
 import com.inno.ace.advice.exception.*;
 import com.inno.ace.enums.CommonCode;
+import com.inno.ace.enums.CommonMsg;
 import com.inno.ace.model.vo.ResultVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,7 +35,7 @@ public class ExceptionAdvice{
 
     @ExceptionHandler(NoVersionException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    protected ResultVO noVersionException(Exception e) {
+    protected ResultVO noVersionException(NoVersionException e) {
         ResultVO resultVO = ResultVO.builder()
                 .result(CommonCode.FAIL.getCode())
                 .resultMsg(e.getMessage())
@@ -60,7 +61,7 @@ public class ExceptionAdvice{
         ResultVO resultVO = ResultVO.builder()
                 .result(CommonCode.FAIL.getCode())
                 .resultMsg(e.getMessage())
-                .errMsg("토큰 유효기간이 만료되었습니다. 재 로그인 해 주세요.")
+                .errMsg(CommonMsg.EXPIRE_LOGIN.getMsg())
                 .build();
         return resultVO;
     }
@@ -129,5 +130,15 @@ public class ExceptionAdvice{
                 .errMsg(e.getStackTrace()[0].toString())
                 .build();
     }
-    
+
+    @ExceptionHandler(NoDomainAddrException.class)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    protected ResultVO NoDomainAddrException(NoDomainAddrException e) {
+        return ResultVO.builder()
+                .result(CommonCode.FAIL.getCode())
+                .resultMsg(e.getMessage())
+                .errMsg(e.getStackTrace()[0].toString())
+                .build();
+    }
+
 }

@@ -12,6 +12,9 @@ public interface MenuDao {
     /** 메뉴 리스트 조회 */
     List<MenuVO> selectMenuList();
 
+    /** 메뉴 아이디의 하부 메뉴 전체 조회 */
+    List<MenuVO> selectMenuListByMenuId(int menuId);
+
     /** 메뉴 조회 */
     Optional<MenuVO>selectMenu(int menuId);
 

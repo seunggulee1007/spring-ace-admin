@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.inno.ace.model.dao.ace.ApiDao">
+
+    <insert id="insertApiLog" parameterType="apiVO">
+        insert into tb_api_log(
+            req_nm,
+            req_data,
+            req_loc
+        )values(
+            #{reqNm},
+            #{reqData},
+            #{reqLoc}
+        )
+        <selectKey keyProperty="reqNo" resultType="int" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <update id="updateApiLog" parameterType="apiVO">
+        update tb_api_log
+            set
+                res_data = #{resData},
+                res_cd = #{resCd}
+        where
+            req_no = #{reqNo}
+    </update>
+
+</mapper>

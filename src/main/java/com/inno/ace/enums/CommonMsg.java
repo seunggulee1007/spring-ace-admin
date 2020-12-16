@@ -24,7 +24,9 @@ public enum CommonMsg {
     SUCCESS_LOGIN("로그인이 성공하였습니다."),
     NO_DATA_FOUND("조회된 데이터가 없습니다."),
     SUCCESS_SEARCH("조회에 성공하였습니다."),
-    EXPIRE_LOGIN("세션이 만료되었습니다. 다시 로그인 해 주세요."),
+    EXPIRE_LOGIN("토큰 유효기간이 만료되었습니다. 다시 로그인 해 주세요."),
+    SUCCESS_API("정상 처리 되었습니다."),
+    NO_DOMAIN_ADDR("등록된 도메인이 없습니다. 도메인을 등록 후 진행해 주세요."),
     ;
     String msg;
     CommonMsg(String msg) {

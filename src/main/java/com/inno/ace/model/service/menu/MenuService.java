@@ -3,6 +3,8 @@ package com.inno.ace.model.service.menu;
 import com.inno.ace.model.vo.MenuVO;
 import com.inno.ace.model.vo.ResultVO;
 
+import java.util.List;
+
 public interface MenuService {
 
     /**
@@ -10,6 +12,13 @@ public interface MenuService {
      * @return
      */
     ResultVO selectMenuList();
+
+    /**
+     * 넘겨진 메뉴아이디 전체 조회
+     * @param menuId
+     * @return
+     */
+    List<MenuVO> selectMenuListByMenuId(int menuId);
 
     /**
      * 메뉴 조회

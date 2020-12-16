@@ -6,6 +6,7 @@ import com.inno.ace.model.vo.MenuVO;
 import com.inno.ace.model.vo.ResultVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
@@ -29,10 +30,15 @@ public class MenuServiceImpl implements MenuService {
         return ResultVO.builder().data(menuList).build();
     }
 
+    public List<MenuVO> selectMenuListByMenuId(int menuId) {
+        return menuDao.selectMenuListByMenuId(menuId);
+    }
+
     public ResultVO selectMenu(int menuId) {
         return ResultVO.builder().data(menuDao.selectMenu(menuId).orElseGet(MenuVO::new)).build();
     }
 
+    @Transactional
     public ResultVO insertMenu(MenuVO menuVO) {
         int result = 0;
         String resultMsg = CommonMsg.SUCCESS_WRITE.getMsg();
