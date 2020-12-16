@@ -22,11 +22,11 @@ public class MenuServiceImpl implements MenuService {
         for(MenuVO menuVO : menuList) {
             menuVO.setChildren(menuList.stream().filter(menu -> menu.getMenuId() != 0 && menu.getParMenuId()== menuVO.getMenuId()).collect(Collectors.toList()));
         }
-        MenuVO menuVO = menuList.stream()
+        menuList = menuList.stream()
                 .filter(menu -> 0 == menu.getMenuId())
                 .sorted(Comparator.comparing(MenuVO::getOrd))
-                .collect(Collectors.toList()).stream().findFirst().orElseGet(MenuVO::new);
-        return ResultVO.builder().data(menuVO).build();
+                .collect(Collectors.toList());
+        return ResultVO.builder().data(menuList).build();
     }
 
     public ResultVO selectMenu(int menuId) {
@@ -37,8 +37,10 @@ public class MenuServiceImpl implements MenuService {
         int result = 0;
         String resultMsg = CommonMsg.SUCCESS_WRITE.getMsg();
         MenuVO tempMenuVO = menuDao.selectOrdAndMenuId(menuVO.getParMenuId()).orElseGet(MenuVO::new);
+        System.err.println(tempMenuVO.toString());
         menuVO.setMenuId(tempMenuVO.getMenuId());
         menuVO.setOrd(tempMenuVO.getOrd());
+        System.err.println(menuVO.toString());
         if(menuDao.insertMenu(menuVO) < 1) {
             result = -1;
             resultMsg = CommonMsg.FAIL_WRITE.getMsg();
@@ -62,7 +64,6 @@ public class MenuServiceImpl implements MenuService {
     public ResultVO deleteMenu(int menuId) {
         int result = 0;
         String resultMsg = CommonMsg.SUCCESS_DELETE.getMsg();
-        menuDao.deleteChildMenu(menuId);
 
         if(menuDao.deleteMenu(menuId) < 1) {
             result = -1;

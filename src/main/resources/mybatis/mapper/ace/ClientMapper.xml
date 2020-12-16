@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<!-- 
-    @apiNote 사업자 휴폐업 관련 매퍼
-    @author  es-seungglee
- -->
+
 <mapper namespace="com.inno.ace.model.dao.ace.ClientDao">
 
     <!-- 중복 체크 -->
@@ -15,8 +12,9 @@
             client_nm = #{clientNm}
     </select>
 
-    <select id="selectClientList" parameterType="pagingVO" resultType="clientVO">
+    <select id="selectClient" resultType="clientVO">
         select
+            client_id                   as clientId,
             client_nm                   as clientNm,
             client_kind                 as clientKind,
             fn_code_nm('clientKind', client_kind) as clientKindNm,
@@ -54,6 +52,57 @@
             contract_amt                as contractAmt,
             contract_date_from          as contractDateFrom,
             contract_date_to            as contractDateTo,
+            domain_addr                 as domainAddr,
+            crt_id                      as crtId,
+            crt_dtm                     as crtDtm,
+            chg_id                      as chgId,
+            chg_dtm                     as chgDtm
+        from tb_client
+        where
+            client_id = #{clientId}
+    </select>
+
+    <select id="selectClientList" parameterType="pagingVO" resultType="clientVO">
+        select
+            client_id                   as clientId,
+            client_nm                   as clientNm,
+            client_kind                 as clientKind,
+            fn_code_nm('clientKind', client_kind) as clientKindNm,
+            biz_no                      as bizNo,
+            biz_result_msg              as bizResultMsg,
+            biz_result_detail_msg       as bizResultDetailMsg,
+            biz_result_detail_eng_msg   as bizResultDetailEngMsg,
+            biz_result                  as bizResult,
+            ceo_nm                      as ceoNm,
+            co_reg_no                   as coRegNo,
+            biz_cond                    as bizCond,
+            fn_code_nm('bizCond', biz_cond) as bizCondNm,
+            biz_kind                    as bizKind,
+            fn_code_nm('bizKind', biz_kind) as bizKindNm,
+            contract_status             as contractStatus,
+            fn_code_nm('contractStatus', contract_status) as contractStatusNm,
+            post_no                     as postNo,
+            addr                        as addr,
+            addr_eng                    as addrEng,
+            addr_type                   as addrType,
+            addr_detail                 as addrDetail,
+            road_nm                     as roadNm,
+            road_nm_cd                  as roadNmCd,
+            bcode                       as bcode,
+            bname                       as bname,
+            building_cd                 as buildingCd,
+            building_nm                 as buildingNm,
+            sido                        as sido,
+            sigungu                     as sigungu,
+            sigungu_cd                  as sigunguCd,
+            tel_no                      as telNo,
+            manager                     as manager,
+            phone                       as phone,
+            email                       as email,
+            contract_amt                as contractAmt,
+            contract_date_from          as contractDateFrom,
+            contract_date_to            as contractDateTo,
+            domain_addr                 as domainAddr,
             crt_id                      as crtId,
             crt_dtm                     as crtDtm,
             chg_id                      as chgId,
@@ -133,6 +182,7 @@
             contract_amt,
             contract_date_from,
             contract_date_to,
+            domain_addr,
             crt_id,
             crt_dtm
         )values(
@@ -169,6 +219,7 @@
             #{contractAmt},
             #{contractDateFrom},
             #{contractDateTo},
+            #{domainAddr},
             #{crtId},
             now()
        )
@@ -209,9 +260,15 @@
                 email= #{email},
                 contract_amt= #{contractAmt},
                 contract_date_from= #{contractDateFrom},
-                contract_date_to= #{contractDateTO}
+                contract_date_to= #{contractDateTo},
+                domain_addr = #{domainAddr}
             where
                 client_id = #{clientId}
     </update>
-    
+
+    <!-- 거래처 삭제 -->
+    <delete id="deleteClient">
+        delete from tb_client where client_id = #{clientId}
+    </delete>
+
 </mapper>

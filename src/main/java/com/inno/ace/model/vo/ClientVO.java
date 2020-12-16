@@ -30,6 +30,8 @@ public class ClientVO extends CommonVO {
     private String bizCond;
     /** 업종 */
     private String bizKind;
+    /** 계약 상태 */
+    private String contractStatus;
     /** 우편번호 */
     private String postNo;
     /** 기본주소 */
@@ -72,5 +74,7 @@ public class ClientVO extends CommonVO {
     private String contractDateFrom;
     /** 계약기간 종료 일자 */
     private String contractDateTo;
+    /** 도메인 주소 */
+    private String domainAddr;
 
 }

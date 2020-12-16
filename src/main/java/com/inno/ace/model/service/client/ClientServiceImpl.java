@@ -9,6 +9,8 @@ import com.inno.ace.model.vo.ResultVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.xml.transform.Result;
+
 @Service
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
@@ -23,6 +25,15 @@ public class ClientServiceImpl implements ClientService {
     public ResultVO selectClientList(PagingVO pagingVO) {
         pagingVO.calcPage(clientDao.selectClientCnt(pagingVO));
         return ResultVO.builder().data(clientDao.selectClientList(pagingVO)).build();
+    }
+
+    /**
+     * 거래처 조회
+     * @param clientId
+     * @return
+     */
+    public ResultVO selectClient(int clientId) {
+        return ResultVO.builder().data(clientDao.selectClient(clientId).orElseGet(ClientVO::new)).build();
     }
 
     /**
@@ -45,6 +56,7 @@ public class ClientServiceImpl implements ClientService {
      */
     public ResultVO insertClient(ClientVO clientVO){
         long result = 0;
+        confirmDuple(clientVO.getClientNm());
         String resultMsg = CommonMsg.SUCCESS_WRITE.getMsg();
         if(clientDao.insertClient(clientVO) < 1) {
             result = -1;
@@ -64,6 +76,21 @@ public class ClientServiceImpl implements ClientService {
         if(clientDao.updateClient(clientVO) < 1) {
             result = -1;
             resultMsg = CommonMsg.FAIL_MODIFY.getMsg();
+        }
+        return ResultVO.builder().result(result).resultMsg(resultMsg).build();
+    }
+
+    /**
+     * 거래처 삭제
+     * @param clientId
+     * @return
+     */
+    public ResultVO deleteClient(int clientId) {
+        long result = 0;
+        String resultMsg = CommonMsg.SUCCESS_DELETE.getMsg();
+        if(clientDao.deleteClient(clientId) < 1) {
+            result = -1;
+            resultMsg = CommonMsg.FAIL_DELETE.getMsg();
         }
         return ResultVO.builder().result(result).resultMsg(resultMsg).build();
     }

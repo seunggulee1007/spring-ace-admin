@@ -60,7 +60,7 @@ public class ExceptionAdvice{
         ResultVO resultVO = ResultVO.builder()
                 .result(CommonCode.FAIL.getCode())
                 .resultMsg(e.getMessage())
-                .errMsg("해당 리소스에 접근하기 위한 권한이 없습니다.")
+                .errMsg("토큰 유효기간이 만료되었습니다. 재 로그인 해 주세요.")
                 .build();
         return resultVO;
     }

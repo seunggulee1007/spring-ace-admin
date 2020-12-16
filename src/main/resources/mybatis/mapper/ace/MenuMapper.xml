@@ -83,7 +83,7 @@
                     IFNULL(MAX(menu_id), 0) +1
                 else
                     IFNULL(MAX(menu_id), #{parMenuId} * 1000) + 1
-            END  AS menu_id
+            END  AS menuId
         FROM tb_menu
         WHERE par_menu_id = #{parMenuId}
     </select>

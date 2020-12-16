@@ -14,6 +14,13 @@ public interface ClientService {
     ResultVO selectClientList(PagingVO pagingVO);
 
     /**
+     * 거래처 조회
+     * @param clientId
+     * @return
+     */
+    ResultVO selectClient(int clientId);
+
+    /**
      * 거래처 명 중복 확인
      * @param clientNm
      * @return
@@ -33,4 +40,12 @@ public interface ClientService {
      * @return
      */
     ResultVO updateClient(ClientVO clientVO);
+
+    /**
+     * 거래처 삭제
+     * @param clientId
+     * @return
+     */
+    ResultVO deleteClient(int clientId);
+
 }

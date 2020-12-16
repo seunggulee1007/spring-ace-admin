@@ -52,4 +52,11 @@ public interface ClientDao {
      */
     Optional<ClientVO> selectClient(int clientId);
 
+    /**
+     * 거래처 삭제
+     * @param clientId
+     * @return
+     */
+    int deleteClient(int clientId);
+
 }
