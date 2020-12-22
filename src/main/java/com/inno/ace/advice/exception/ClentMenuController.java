@@ -1,5 +1,6 @@
 package com.inno.ace.advice.exception;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.inno.ace.model.service.clientMenu.ClientMenuService;
 import com.inno.ace.model.vo.ClientMenuVO;
 import com.inno.ace.model.vo.ResultVO;
@@ -18,7 +19,7 @@ public class ClentMenuController {
     }
 
     @PostMapping
-    public ResultVO syncClientMenu(ClientMenuVO clientMenuVO) {
+    public ResultVO syncClientMenu(ClientMenuVO clientMenuVO)  throws JsonProcessingException {
         return clientMenuService.syncClientMenu(clientMenuVO);
     }
 

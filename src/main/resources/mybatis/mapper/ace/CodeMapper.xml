@@ -20,7 +20,6 @@
             code_id         as codeId,
             code_master_id  as codeMasterId,
             fn_get_master_code_nm(code_master_id) as codeMasterNm,
-            code            as code,
             code_nm         as codeNm,
             code_info       as codeInfo,
             use_yn          as useYn,
@@ -51,7 +50,6 @@
         select
             code_id         as codeId,
             code_master_id  as codeMasterId,
-            code            as code,
             code_nm         as codeNm,
             code_info       as codeInfo,
             use_yn          as useYn,
@@ -81,7 +79,6 @@
         select
             code_id         as codeId,
             code_master_id  as codeMasterId,
-            code            as code,
             code_nm         as codeNm,
             code_info       as codeInfo,
             tc.use_yn          as useYn,
@@ -115,7 +112,6 @@
     <insert id="insertCode" parameterType="codeVO">
         insert into tb_code(
             code_master_id,
-            code          ,
             code_nm       ,
             code_info     ,
             use_yn        ,
@@ -133,8 +129,7 @@
             crt_id        ,
             crt_dtm       
         )values (
-            #{codeMasterId}, 
-            #{code},         
+            #{codeMasterId},
             #{codeNm},
             #{codeInfo},
             #{useYn},
@@ -158,8 +153,7 @@
     <update id="updateCode" parameterType="codeVO">
         update tb_code
             set
-                 code_master_id = #{codeMasterId}, 
-                 code           = #{code},         
+                 code_master_id = #{codeMasterId},
                  code_nm        = #{codeNm},
                  code_info      = #{codeInfo},
                  use_yn         = #{useYn},        

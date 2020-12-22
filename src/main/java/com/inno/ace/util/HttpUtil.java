@@ -5,17 +5,13 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.net.*;
 import java.util.Map;
 
 @Component
 public class HttpUtil {
 
     public String sendRest(String sendUrl, String json) throws IllegalStateException, IOException {
-
         String inputLine = null;
         StringBuffer outResult = new StringBuffer();
         URL url = new URL(sendUrl);
@@ -40,49 +36,44 @@ public class HttpUtil {
         return outResult.toString();
     }
 
-    public String requestPost(Map<String, Object> params, String reqUrl, Map<String, Object> propertyParam) throws UnsupportedEncodingException, MalformedURLException, IOException  {
+    public String requestGet(String reqUrl, Map<String, Object> params)  {
+
         StringBuilder postData = new StringBuilder();
-        for(Map.Entry<String,Object> param : params.entrySet()) {
-            if(postData.length() != 0) postData.append('&');
-
-            postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
-            postData.append('=');
-            postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
-
-        }
-        
-        return requestPost(postData.toString(), reqUrl, propertyParam);
-    }
-    
-    public String requestPost(String reqParam, String reqUrl, Map<String, Object> propertyParam) throws MalformedURLException, IOException {
-        
         String resultData = "";
+        try {
 
-        URL url = new URL(reqUrl);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("POST");
-        con.setDoOutput(true);
-
-        if(propertyParam != null) {
-            for(Map.Entry<String,Object> param : propertyParam.entrySet()) {
-                con.setRequestProperty(URLEncoder.encode(param.getKey(), "UTF-8"), URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+            for(Map.Entry<String,Object> param : params.entrySet()) {
+                if(postData.length() != 0) postData.append('&');
+                postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+                postData.append('=');
+                postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
             }
-        }
 
-        try(OutputStream os = con.getOutputStream();) {
-            os.write(reqParam.getBytes("utf-8"));
-            os.flush();
-        }
+            URL url = new URL(reqUrl + "?" + postData.toString());
 
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"))) {
-            String inputLine;
+            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
 
-            while((inputLine  = in.readLine()) != null) {
-                resultData += inputLine;
+            conn.setRequestMethod("GET");
+            // 연결 타임 아웃
+            conn.setConnectTimeout(3000); // 3초
+            // 읽기 타임아웃
+            conn.setReadTimeout(3000);  // 3초
+
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"))) {
+                String inputLine;
+
+                while((inputLine  = in.readLine()) != null) {
+                    resultData += inputLine;
+                }
             }
+        }catch (MalformedURLException | ProtocolException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        
         return resultData;
     }
 }

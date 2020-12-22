@@ -5,5 +5,8 @@ import com.inno.ace.model.vo.ResultVO;
 import java.util.Map;
 
 public interface ApiService {
-    ResultVO doApi(String apiNm, String reqUrl, Map<String, Object> data);
+
+    ResultVO doApiGet(String apiNm, String reqUrl, Map<String, Object> map );
+
+    ResultVO doApiPost(String apiNm, String reqUrl, String json);
 }

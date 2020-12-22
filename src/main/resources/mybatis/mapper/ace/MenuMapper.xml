@@ -52,7 +52,47 @@
     </select>
 
     <select id="selectMenuListByMenuId" resultType="menuVO">
-        select
+        WITH recursive cte (
+                            menu_id,
+                            par_menu_id,
+                            menu_nm,
+                            ORD,
+                            use_yn,
+                            menu_yn,
+                            menu_level,
+                            page_url,
+                            component,
+                            meta_info
+            ) AS (
+            SELECT
+                menu_id,
+                par_menu_id,
+                menu_nm,
+                ORD,
+                use_yn,
+                menu_yn,
+                menu_level,
+                page_url,
+                component,
+                meta_info
+            FROM tb_menu
+            WHERE menu_id = #{menuId}
+            UNION ALL
+            SELECT
+                tm.menu_id,
+                tm.par_menu_id,
+                tm.menu_nm,
+                tm.ORD,
+                tm.use_yn,
+                tm.menu_yn,
+                tm.menu_level,
+                tm.page_url,
+                tm.component,
+                tm.meta_info
+            FROM tb_menu tm
+                     inner JOIN cte
+                                ON tm.par_menu_id = cte.menu_id)
+        SELECT
             menu_id         as menuId,
             par_menu_id     as parMenuId,
             menu_nm         as menuNm,
@@ -62,15 +102,8 @@
             menu_level      as menuLevel,
             page_url        as pageUrl,
             component,
-            meta_info       as metaInfo,
-            crt_dtm         as crtDtm,
-            crt_id          as crtId,
-            chg_dtm         as chgDtm,
-            chg_id          as chgId
-        from tb_menu
-        where
-            menu_id = #{menuId}
-            or par_menu_id = #{menuId}
+            meta_info       as metaInfo
+        FROM cte
     </select>
     <!-- 부모가 같은 메뉴 전체 조회 -->
     <select id="selectMenuListByParMenuId" resultType="menuVO">

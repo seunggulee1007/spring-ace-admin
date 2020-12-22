@@ -17,8 +17,8 @@ public enum CommonMsg {
     ALREADY_MEMBER("이미 존재하는 아이디 입니다. 다른 아이디를 입력해 주세요"),
     DUPLE_CLIENT("이미 존재하는 거래처 명 입니다. 다른 거래처 명을 입력해 주세요."),
     AVALIABLE_CLIENT("사용 가능한 거래처 명 입니다."),
-    DUPLE_CODE_MASTER_NM(""),
-    AVAILABLE_MASTER_NM(""),
+    DUPLE_CODE_MASTER_NM("이미 사용중인 그룹명 입니다. 다른 그룹명을 입력해 주세요."),
+    AVAILABLE_MASTER_NM("사용 가능한 그룹명 입니다."),
     NO_MEMBER("계정이 존재하지 않는 회원입니다."),
     FALSE_ID("비밀번호가 틀렸습니다."),
     SUCCESS_LOGIN("로그인이 성공하였습니다."),
@@ -27,6 +27,7 @@ public enum CommonMsg {
     EXPIRE_LOGIN("토큰 유효기간이 만료되었습니다. 다시 로그인 해 주세요."),
     SUCCESS_API("정상 처리 되었습니다."),
     NO_DOMAIN_ADDR("등록된 도메인이 없습니다. 도메인을 등록 후 진행해 주세요."),
+    SUCCESS_MENU_ASYNC("동기화 요청이 완료되었습니다. 익일 00:00에 동기화 됩니다."),
     ;
     String msg;
     CommonMsg(String msg) {

@@ -11,8 +11,9 @@ import java.util.Optional;
 @Mapper
 public interface ApiDao {
 
+   /** api 요청부 적재 */
    int insertApiLog(ApiVO apiVO);
-
+   /** api 응답부 적재 */
    int updateApiLog(ApiVO apiVO);
 
 }

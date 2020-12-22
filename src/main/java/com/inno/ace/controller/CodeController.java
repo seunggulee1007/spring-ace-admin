@@ -18,6 +18,10 @@ public class CodeController {
     private final CodeMasterService codeMasterService;
     private final CodeService codeService;
 
+    @ApiOperation(value="코드 그룹 중복 확인", notes="넘겨진 코드 명이 중복되었는지 확인 하는 메소드")
+    @GetMapping("/confirmDuple/{codeMasterNm}")
+    public ResultVO selectDupleCodeNm(@PathVariable String codeMasterNm) {return codeMasterService.selectDupleCodeNm(codeMasterNm);}
+    
     @ApiOperation(value="코드 마스터 조회", notes = "코드 마스터 리스트 조회")
     @GetMapping("/codeMasterList")
     public ResultVO selectCodeMasterList(PagingVO pagingVO) {

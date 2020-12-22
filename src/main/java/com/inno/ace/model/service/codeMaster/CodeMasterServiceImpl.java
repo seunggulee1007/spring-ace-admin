@@ -9,6 +9,10 @@ import com.inno.ace.model.vo.ResultVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class CodeMasterServiceImpl implements CodeMasterService {
@@ -17,7 +21,7 @@ public class CodeMasterServiceImpl implements CodeMasterService {
     private final CodeMasterDao codeMasterDao;
 
     public ResultVO selectDupleCodeNm(String codeMasterNm) {
-        if(codeMasterDao.selectDupleCodeNm(codeMasterNm) < 1) {
+        if(codeMasterDao.selectDupleCodeNm(codeMasterNm) > 0) {
             throw new DuplicationException(CommonMsg.DUPLE_CODE_MASTER_NM.getMsg());
         }
         return ResultVO.builder().resultMsg(CommonMsg.AVAILABLE_MASTER_NM.getMsg()).build();
@@ -29,8 +33,12 @@ public class CodeMasterServiceImpl implements CodeMasterService {
      * @return
      */
     public ResultVO selectCodeMasterList(PagingVO pagingVO) {
-        pagingVO.calcPage(codeMasterDao.selectCodeMasterCnt(pagingVO));
-        return ResultVO.builder().data(codeMasterDao.selectCodeMasterList(pagingVO)).build();
+        int cnt = codeMasterDao.selectCodeMasterCnt(pagingVO);
+        Map<String, Object> map= new HashMap<>();
+        List<CodeMasterVO> list = codeMasterDao.selectCodeMasterList(pagingVO);
+        map.put("listCnt", cnt);
+        map.put("codeMasterList", list);
+        return ResultVO.builder().data(map).build();
     }
 
     /**
