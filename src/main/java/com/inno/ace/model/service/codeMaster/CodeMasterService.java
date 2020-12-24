@@ -1,5 +1,6 @@
 package com.inno.ace.model.service.codeMaster;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.inno.ace.model.vo.CodeMasterVO;
 import com.inno.ace.model.vo.PagingVO;
 import com.inno.ace.model.vo.ResultVO;
@@ -40,4 +41,7 @@ public interface CodeMasterService {
      * @return
      */
     ResultVO deleteCodeMaster(int codeMasterId);
+
+    ResultVO syncCode(int clientId) throws JsonProcessingException;
+
 }

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CodeService {
 
-    ResultVO selectCodeList(PagingVO pagingVO);
+    ResultVO selectCodeList(int codeMasterId);
 
     List<CodeVO> selectCodeListByCodeMasterNm(String codeMasterNm);
 

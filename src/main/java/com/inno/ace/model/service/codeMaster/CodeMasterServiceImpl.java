@@ -1,8 +1,15 @@
 package com.inno.ace.model.service.codeMaster;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inno.ace.advice.exception.DuplicationException;
+import com.inno.ace.enums.ApiNm;
+import com.inno.ace.enums.ApiUrl;
 import com.inno.ace.enums.CommonMsg;
 import com.inno.ace.model.dao.ace.CodeMasterDao;
+import com.inno.ace.model.service.api.ApiService;
+import com.inno.ace.model.service.client.ClientService;
+import com.inno.ace.model.vo.ClientVO;
 import com.inno.ace.model.vo.CodeMasterVO;
 import com.inno.ace.model.vo.PagingVO;
 import com.inno.ace.model.vo.ResultVO;
@@ -19,6 +26,8 @@ public class CodeMasterServiceImpl implements CodeMasterService {
 
     // 코드 마스터 dao
     private final CodeMasterDao codeMasterDao;
+    private final ClientService clientService;
+    private final ApiService apiService;
 
     public ResultVO selectDupleCodeNm(String codeMasterNm) {
         if(codeMasterDao.selectDupleCodeNm(codeMasterNm) > 0) {
@@ -85,5 +94,19 @@ public class CodeMasterServiceImpl implements CodeMasterService {
         }
         return ResultVO.builder().result(result).resultMsg(resultMsg).build();
     }
+
+    public ResultVO syncCode(int clientId) throws JsonProcessingException {
+        ClientVO clientVO = (ClientVO)clientService.selectClient(clientId).getData();
+        String domainAddr = clientVO.getDomainAddr();
+        // 도메인에 프로토콜이 없다면 프로토콜을 붙여 준다.
+        if(!domainAddr.startsWith("http://")) {
+            domainAddr = "http://" + domainAddr + ApiUrl.SYNC_CODE.getApiUrl();
+        }
+        List<CodeMasterVO> codeMasterList = codeMasterDao.selectCodeMasterAll();
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(codeMasterList);
+        return apiService.doApiPost(ApiNm.SYNC_CODE.getApiNm(), domainAddr, json);
+    }
+
 
 }

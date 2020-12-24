@@ -15,9 +15,8 @@ import java.util.List;
 public class CodeServiceImpl implements CodeService {
     private final CodeDao codeDao;
 
-    public ResultVO selectCodeList(PagingVO pagingVO) {
-        pagingVO.calcPage(codeDao.selectCodeCnt(pagingVO));
-        List<CodeVO> codeList = codeDao.selectCodeList(pagingVO);
+    public ResultVO selectCodeList(int codeMasterId) {
+        List<CodeVO> codeList = codeDao.selectCodeListByMasterId(codeMasterId);
         return ResultVO.builder().data(codeList).build();
     }
 

@@ -30,6 +30,12 @@ public interface CodeMasterDao {
     List<CodeMasterVO> selectCodeMasterList(PagingVO pagingVO);
 
     /**
+     * 코드 정보 전체 조회
+     * @return
+     */
+    List<CodeMasterVO> selectCodeMasterAll();
+
+    /**
      * @apiNote 코드 마스터 정보 등록
      * @author leesg
      * @param codeMasterVO
