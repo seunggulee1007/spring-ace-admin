@@ -90,8 +90,8 @@
                 tm.component,
                 tm.meta_info
             FROM tb_menu tm
-                     inner JOIN cte
-                                ON tm.par_menu_id = cte.menu_id)
+            inner JOIN cte
+            ON tm.par_menu_id = cte.menu_id)
         SELECT
             menu_id         as menuId,
             par_menu_id     as parMenuId,
