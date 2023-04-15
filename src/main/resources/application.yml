@@ -6,9 +6,9 @@ spring:
   datasource:
     hikari:
       ace:
-        jdbc-url: jdbc:log4jdbc:mysql://115.143.85.142:3306/ace_admin?characterEncoding=UTF-8&serverTimezone=UTC
-        username: ace_admin
-        password: ace_adminepdlxjqpdltm1!
+        jdbc-url: url
+        username: username
+        password: password
         driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
         # driver-class-name: org.mariadb.jdbc.Driver
         pool-name: default-r-pool
